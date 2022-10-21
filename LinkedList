@@ -236,6 +236,7 @@ struct node* binarySearch(int x, struct node* p) {
     }
 }
 
+//reverse a linked list
 struct node* reverseLL(struct node* p) {
     struct node* prev = NULL;
     struct node* curr = p;
@@ -251,6 +252,7 @@ struct node* reverseLL(struct node* p) {
 }
 
 
+//checking loop in linked list
 bool checkLoop (struct node* p) {
     struct node* s = p;
     while(s != NULL && s->next != NULL) {
@@ -263,6 +265,20 @@ bool checkLoop (struct node* p) {
     return false;
 }
 
+
+bool checkLoop2(struct node* p) {
+    struct node* slow = p;
+    struct node* fast = p;
+    while(fast != NULL && fast->next != NULL && fast->next->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+        if (fast == slow) {
+            return true;
+        }
+    }
+    return false;
+    
+}
 
 int main()
 {
@@ -352,7 +368,8 @@ int main()
     s = reverseLL(s);
     display(s);
     
-    bool loop1 = checkLoop(s);
+    // bool loop1 = checkLoop(s);
+    bool loop1 = checkLoop2(s);
     if (loop1) {
         printf("%s","Loop is present\n");
     }
@@ -380,7 +397,8 @@ int main()
     h1.next = &d1;
     
     s = &a1;
-    bool loop2 = checkLoop(s);
+    // bool loop2 = checkLoop(s);
+    bool loop2 = checkLoop2(s);
     if (loop2) {
         printf("Loop is present\n");
     }

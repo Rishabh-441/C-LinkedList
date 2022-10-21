@@ -236,6 +236,20 @@ struct node* binarySearch(int x, struct node* p) {
     }
 }
 
+struct node* reverseLL(struct node* p) {
+    struct node* prev = NULL;
+    struct node* curr = p;
+    struct node* nextNode = NULL;
+    
+    while(curr != NULL) {
+        nextNode = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = nextNode;
+    }
+    return prev;
+}
+
 
 
 int main()
@@ -323,6 +337,8 @@ int main()
         printf("%u, element is : %d\n", search_bin, search_bin->val);
     
     
+    s = reverseLL(s);
+    display(s);
 
     return 0;
 }

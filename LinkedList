@@ -251,6 +251,18 @@ struct node* reverseLL(struct node* p) {
 }
 
 
+bool checkLoop (struct node* p) {
+    struct node* s = p;
+    while(s != NULL && s->next != NULL) {
+        if (s->flag == true) {
+            return true;
+        }
+        s->flag = true;
+        s = s->next;
+    }
+    return false;
+}
+
 
 int main()
 {
@@ -339,6 +351,43 @@ int main()
     
     s = reverseLL(s);
     display(s);
+    
+    bool loop1 = checkLoop(s);
+    if (loop1) {
+        printf("%s","Loop is present\n");
+    }
+    else {
+        printf("%s","Loop not present\n");
+    }
+    
+    
+    struct node a1 = {10, NULL, false};
+    struct node b1 = {20, NULL};
+    struct node c1 = {30, NULL};
+    struct node d1 = {40, NULL};
+    struct node e1 = {50, NULL};
+    struct node f1 = {60, NULL};
+    struct node g1 = {70, NULL};
+    struct node h1 = {80, NULL};
+    
+    a1.next = &b1;
+    b1.next = &c1;
+    c1.next = &d1;
+    d1.next = &e1;
+    e1.next = &f1;
+    f1.next = &g1;
+    g1.next = &h1;
+    h1.next = &d1;
+    
+    s = &a1;
+    bool loop2 = checkLoop(s);
+    if (loop2) {
+        printf("Loop is present\n");
+    }
+    else {
+        printf("Loop not present\n");
+    }
+    
 
     return 0;
 }

@@ -1,0 +1,328 @@
+
+#include <stdio.h>
+#include <stdbool.h>
+
+//structure of node:
+struct node {
+    int val;
+    struct node *next;
+    bool flag;
+};
+
+
+struct node* createLL(int arr[], int len) {
+    struct node* nodeArr[len];
+    for (int i = 0; i < len; i++) {
+        struct node* e = (struct node*)malloc(sizeof(struct node));
+        e->val = arr[i];
+        e->next = NULL;
+        nodeArr[i] = e;
+    }
+    
+    for (int i = 1; i < len; i++) {
+        nodeArr[i-1]->next = nodeArr[i];
+    }
+    return nodeArr[0];
+}
+    
+ 
+ //finding last element:   
+struct node* lastElement(struct node* p) {
+    struct node* s = p;
+    while (s != NULL && s->next != NULL) {
+        s = s->next;
+    }
+    return s;
+} 
+
+
+//finding second last element:
+struct node* secondLastElement(struct node* p) {
+    if (p == NULL || p->next == NULL) {
+        return NULL;
+    }
+    struct node* s = p;
+    struct node* prev = NULL;
+    
+    while (s != NULL && s->next != NULL) {
+        prev = s;
+        s = s->next;
+    }
+    return prev;
+}
+
+//searching for an element in linked list:
+struct node* search(int x, struct node* p) {
+    if (p == NULL) return p;
+    struct node* s = p;
+    while (s->next != NULL) {
+        if (s-> val == x) return s;
+        s = s->next;
+    }
+    if (s-> val == x) return s;
+    printf("%s\n","no element found");
+    return NULL;
+}
+
+
+//display all elements of linked list:
+struct node* display(struct node* p) {
+    struct node* s = p;
+    while(s != NULL && s->next != NULL) {
+        printf("%d-->", s->val);
+        s = s->next;
+    }
+    printf("%d\n", s->val);
+}
+
+
+//insert element at end of linked list:
+void insertAtEnd(int x, struct node* p) {
+    
+    struct node* element = (struct node*) malloc(sizeof(struct node));
+    element->val = x;
+    element->next = NULL;
+    
+    
+    if (p == NULL) return;
+    else {
+        struct node* s = p;
+        while(s->next != NULL) {
+            s = s->next;
+        }
+        s->next = element;
+    }
+}
+
+
+//delete last node of singlly linked list:
+void deleteLast(struct node* p) {
+    struct node* s = p;
+    if (s == NULL || s->next == NULL) {
+        p = NULL;
+        return;
+    }
+    while(s->next->next != NULL) {
+        s = s->next;
+    }
+    s->next = NULL;
+}
+
+struct node* lastElementToFirst(struct node* p) {
+    struct node* s = p;
+    if (s == NULL || s->next == NULL) {
+        return NULL;
+    }
+    struct node* prev = NULL;
+    while(s->next != NULL) {
+        prev = s;
+        s = s->next;
+    }
+    
+    prev->next = NULL;
+    s->next = p;
+    p = s;
+    return p;
+}
+
+
+struct node* kthNodeFromLast(int k, struct node* p) {
+    struct node* s = p;
+    struct node* s1 = p;
+    int i = 1;
+    while(s1 != NULL && s1->next != NULL && i < k) {
+        i++;
+        s1 = s1->next;
+    }
+    
+    if (i == k) {
+        while(s1->next != NULL) {
+            s = s->next;
+            s1 = s1->next;
+        }
+        return s;
+    }
+    else {
+        return NULL;
+    }
+}
+
+struct node* middleNode(struct node* p) {
+    struct node* slow = p;
+    struct node* fast = p;
+    
+    while(fast-> next != NULL && fast->next->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    
+    return slow;
+}
+
+
+void displayWithFlags(struct node* p) {
+    if (p == NULL) return;
+    struct node* s = p;
+    while(s->next != NULL) {
+        printf("%d | %d | %u ---> ", s->val, s->flag, s->next);
+        s = s->next;
+    }
+    printf("%d | %d | %u\n", s->val, s->flag, s->next);
+}
+
+
+void setFlags(struct node* p) {
+    struct node* s = p;
+    if (s == NULL) return;
+    while (s->next != NULL) {
+        s->flag = false;
+        s = s->next;
+    }
+    s->flag = true;
+    
+    
+}
+struct node* midForBsearch(struct node* p) {
+    struct node* slow = p;
+    struct node* fast = p;
+    
+    if (p->flag == true || p->next->flag == true) return p;
+    
+    do {
+        slow = slow->next;
+        fast = fast->next->next;
+    }while(fast-> flag != 1 && fast->next->flag != 1);
+    
+    return slow;
+}
+
+//binarySearch in Linked list:
+struct node* binarySearch(int x, struct node* p) {
+    printf("searching for %d\n", x);
+    setFlags(p);
+    struct node* s = p;
+    if (p == NULL) return p;
+    else {
+        struct node* mid = NULL;
+        
+        while (s->next != NULL) 
+        {
+            mid = midForBsearch(s);
+            
+            // printf("bsearch mid is %d\n", mid->val);
+            
+            if (mid->val == x) return mid;
+            
+            else if (x > mid->val) 
+            {
+                s = mid->next;
+                displayWithFlags(s);
+            }
+            
+            else 
+            {
+                mid->flag = true;
+                displayWithFlags(p);
+            }
+        }
+        if (s->val == x) return s;
+        if (mid->val == x)
+        {
+            return mid;
+        }
+            
+        printf("%s\n", "element not found!!");
+        return NULL;
+    }
+}
+
+
+
+int main()
+{
+    struct node a = {10, NULL};
+    struct node b = {20, NULL};
+    struct node c = {30, NULL};
+    struct node d = {40, NULL};
+    struct node e = {50, NULL};
+    struct node f = {60, NULL};
+    
+    a.next = &b;
+    b.next = &c;
+    c.next = &d;
+    d.next = &e;
+    e.next = &f;
+    printf("%d\n", a.flag);
+    struct node *s = &a;
+    
+    printf("%u\n", s);
+    printf("%d\n", s->val);
+    printf("%u\n", s->next);
+    printf("%d\n", sizeof(struct node));
+    
+    //finding the last element:
+    struct node *last = lastElement(s);
+    printf("last element address : %u\nlast element value : %d\n", last, last->val);
+    
+    struct node *SecondLast = secondLastElement(s);
+    printf("Second last element address : %u\nSecond last element value : %d\n", SecondLast, SecondLast->val);
+    
+    // printf("%d %d %d", sizeof(struct node*), sizeof(struct node), sizeof(int));
+    
+    struct node* searchx = search(850, s);
+    printf("element address : %u\n", searchx);
+    
+    searchx = search(50, s);
+    printf("element address : %u\nelement value : %d\n", searchx, searchx->val);
+    
+    display(s);
+    
+    insertAtEnd(234, s);
+    insertAtEnd(504, s);
+    insertAtEnd(54, s);
+    insertAtEnd(698, s);
+    display(s);
+    
+    deleteLast(s);
+    deleteLast(s);
+    display(s);
+    
+    
+    s = lastElementToFirst(s);
+    s = lastElementToFirst(s);
+    s = lastElementToFirst(s);
+    display(s);
+    
+    
+    for (int i = 0; i < 8; i++) {
+        struct node* kthLast = kthNodeFromLast(i+1, s);
+        printf("%u, %dth element from last is : %d\n", kthLast, i+1,  kthLast->val);
+    }
+    
+    
+    struct node* middle = middleNode(s);
+    printf("%u, middle element is : %d\n", middle, middle->val);
+    
+    middle = middleNode(s);
+    printf("%u, middle element is : %d\n", middle, middle->val);
+    
+    
+    int llArr[] = {10,20,30,40,45,50,55,60,65};
+    int len = sizeof(llArr) / sizeof(llArr[0]);
+    struct node* LL1 = createLL(llArr, len);
+    display(LL1);
+    
+    
+    
+    struct node* search_bin = binarySearch(20, LL1);
+    if (search_bin != NULL)
+        printf("%u, element is : %d\n", search_bin, search_bin->val);
+    
+    search_bin = binarySearch(55, LL1);
+    if (search_bin != NULL)
+        printf("%u, element is : %d\n", search_bin, search_bin->val);
+    
+    
+
+    return 0;
+}
